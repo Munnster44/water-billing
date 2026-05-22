@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hamilton Water Bill Calculator</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#eef3f8;
+    margin:0;
+    padding:20px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.app{
+    max-width:900px;
+    width:100%;
+    box-sizing:border-box;
+    margin:auto;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+    overflow-x:auto;
+}
+
+.section{
+    margin-top:25px;
+    border:1px solid #cfd8e3;
+    border-radius:10px;
+    overflow-x:auto;
+}
+
+.section-title{
+    background:#003366;
+    color:white;
+    padding:10px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th, td{
+    padding:10px;
+    border-bottom:1px solid #ddd;
+}
+
+th{
+    background:#f3f7fb;
+}
+
+input{
+    padding:6px;
+    font-size:15px;
+}
+
+.number{
+    width:100px;
+}
+
+.desc{
+    width:100%;
+    max-width:300px;
+}
+
+.right{
+    text-align:right;
+}
+
+.total-box{
+    margin-top:25px;
+    background:#003366;
+    color:white;
+    padding:18px;
+    border-radius:10px;
+    font-size:26px;
+    font-weight:bold;
+    text-align:right;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#0077cc;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#005fa3;
+}
+
+.note{
+    margin-top:20px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:700px){
+    table{
+        font-size:13px;
+    }
+
+    .number{
+        width:75px;
+    }
+
+    .total-box{
+        font-size:20px;
+    }
+}
+
+
+table{
+    min-width:650px;
+}
+
+@media(max-width:700px){
+
+    body{
+        padding:8px;
+    }
+
+    .app{
+        padding:10px;
+    }
+
+    button{
+        width:100%;
+        margin-top:10px;
+    }
+
+    input{
+        font-size:16px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+
+<h1>Hamilton Water Bill Calculator</h1>
+<div style="text-align:center;
+            font-size:16px;
+            color:#555;
+            margin-top:-10px;
+            margin-bottom:15px;">
+Version v1.6 Baseline
+</div>
+
+
+<label>
+Billing Days:
+<input class="number" type="number" id="days" value="30" min="0">
+</label>
+
+<div class="section">
+<div class="section-title">Consumption Block 1</div>
+
+<table>
+<tr>
+<th>Description</th>
+<th>Units</th>
+<th>Rate</th>
+<th>Total</th>
+</tr>
+
+<tr>
+<td>Water Fixed Charge</td>
+<td class="right"><span id="days1">30</span> days</td>
+<td class="right">
+<input class="number" type="number" id="waterFixedRate" value="0.56" step="0.01">
+</td>
+<td class="right" id="waterFixedTotal">$0.00</td>
+</tr>
+
+<tr>
+<td>Water Consumption Charge</td>
+<td class="right">
+<input class="number" type="number" id="waterUnits" value="0" step="0.01">
+</td>
+<td class="right">
+<input class="number" type="number" id="waterConsumptionRate" value="1.21" step="0.01">
+</td>
+<td class="right" id="waterConsumptionTotal">$0.00</td>
+
+<tr>
+<td>Usage Rate Over 10 m3</td>
+<td class="right">
+<input class="number" type="number" id="waterOver10Units" value="0" step="0.01">
+</td>
+<td class="right">
+<input class="number" type="number" id="waterOver10Rate" value="2.42" step="0.01">
+</td>
+<td class="right" id="waterOver10Total">$0.00</td>
+</tr>
+
+</table>
+</div>
+
+<div class="section">
+<div class="section-title">Treatment Block 1</div>
+
+<table>
+<tr>
+<th>Description</th>
+<th>Units</th>
+<th>Rate</th>
+<th>Total</th>
+</tr>
+
+<tr>
+<td>Waste Water Fixed Charge</td>
+<td class="right"><span id="days2">30</span> days</td>
+<td class="right">
+<input class="number" type="number" id="wasteFixedRate" value="0.63" step="0.01">
+</td>
+<td class="right" id="wasteFixedTotal">$0.00</td>
+</tr>
+
+<tr>
+<td>Waste Water Discharge</td>
+<td class="right">
+<input class="number" type="number" id="wasteUnits" value="0" step="0.01">
+</td>
+<td class="right">
+<input class="number" type="number" id="wasteDischargeRate" value="1.31" step="0.01">
+</td>
+<td class="right" id="wasteDischargeTotal">$0.00</td>
+
+<tr>
+<td>Usage Rate Over 10 m3</td>
+<td class="right">
+<input class="number" type="number" id="wasteOver10Units" value="0" step="0.01">
+</td>
+<td class="right">
+<input class="number" type="number" id="wasteOver10Rate" value="2.61" step="0.01">
+</td>
+<td class="right" id="wasteOver10Total">$0.00</td>
+</tr>
+
+</tr>
+</table>
+</div>
+
+<div class="section">
+<div class="section-title">Additional Charge</div>
+
+<table>
+<tr>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+
+<tr>
+<td>
+<input class="desc" type="text" id="extraDescription" placeholder="Enter descriptor">
+</td>
+<td class="right">
+$ <input class="number" type="number" id="extraAmount" value="0" step="0.01">
+</td>
+</tr>
+</table>
+</div>
+
+<div class="total-box">
+Total Current Charges:
+<span id="grandTotal">$0.00</span>
+</div>
+
+
+<button onclick="resetForm()">Reset</button>
+<button onclick="saveTXT()">Save TXT</button>
+<button onclick="printBill()">Print</button>
+<button onclick="saveRates()">Save Rates</button>
+
+
+<div class="note">
+© 2026 Glen Carruthers. All rights reserved.
+</div>
+
+</div>
+
+<script>
+
+function money(v){
+    return "$" + v.toFixed(2);
+}
+
+function getValue(id){
+    return parseFloat(document.getElementById(id).value) || 0;
+}
+
+function calculate(){
+
+    const days = getValue('days');
+
+    document.getElementById('days1').innerText = days;
+    document.getElementById('days2').innerText = days;
+
+    const waterFixed =
+        days * getValue('waterFixedRate');
+
+    const waterConsumption =
+        getValue('waterUnits') *
+        getValue('waterConsumptionRate');
+
+    const wasteFixed =
+        days * getValue('wasteFixedRate');
+
+    const wasteDischarge =
+        getValue('wasteUnits') *
+        getValue('wasteDischargeRate');
+
+    
+    const waterOver10 =
+        getValue('waterOver10Units') *
+        getValue('waterOver10Rate');
+
+    const wasteOver10 =
+        getValue('wasteOver10Units') *
+        getValue('wasteOver10Rate');
+
+    const extraAmount =
+        getValue('extraAmount');
+
+    document.getElementById('waterFixedTotal').innerText =
+        money(waterFixed);
+
+    document.getElementById('waterConsumptionTotal').innerText =
+        money(waterConsumption);
+
+    document.getElementById('wasteFixedTotal').innerText =
+        money(wasteFixed);
+
+    document.getElementById('wasteDischargeTotal').innerText =
+        money(wasteDischarge);
+
+    document.getElementById('waterOver10Total').innerText =
+        money(waterOver10);
+
+    document.getElementById('wasteOver10Total').innerText =
+        money(wasteOver10);
+
+
+    const grandTotal =
+        waterFixed +
+        waterConsumption +
+        wasteFixed +
+        wasteDischarge +
+        waterOver10 +
+        wasteOver10 +
+        extraAmount;
+
+    document.getElementById('grandTotal').innerText =
+        money(grandTotal);
+}
+
+function resetForm(){
+
+    document.getElementById('days').value = 30;
+
+    document.getElementById('waterFixedRate').value = 0.56;
+    document.getElementById('waterConsumptionRate').value = 1.21;
+
+    document.getElementById('wasteFixedRate').value = 0.63;
+    document.getElementById('wasteDischargeRate').value = 1.31;
+
+    document.getElementById('waterUnits').value = 0;
+    document.getElementById('wasteUnits').value = 0;
+
+    
+    document.getElementById('waterOver10Units').value = 0;
+    document.getElementById('waterOver10Rate').value = 2.42;
+
+    document.getElementById('wasteOver10Units').value = 0;
+    document.getElementById('wasteOver10Rate').value = 2.61;
+
+    document.getElementById('extraDescription').value = "";
+    document.getElementById('extraAmount').value = 0;
+
+    calculate();
+}
+
+document.querySelectorAll('input').forEach(el=>{
+    el.addEventListener('input', calculate);
+});
+
+calculate();
+
+
+function saveTXT(){
+
+    const extraDesc =
+        document.getElementById('extraDescription').value || 'Additional Charge';
+
+    const lines = [];
+
+    lines.push('WATER BILL CALCULATOR');
+    lines.push('======================');
+    lines.push('');
+
+    lines.push('Billing Days: ' + getValue('days'));
+    lines.push('');
+
+    lines.push('Consumption Block 1');
+    lines.push('-------------------');
+
+    lines.push(
+        'Water Fixed Charge: ' +
+        document.getElementById('waterFixedTotal').innerText
+    );
+
+    lines.push(
+        'Water Consumption Charge: ' +
+        document.getElementById('waterConsumptionTotal').innerText
+    );
+
+    
+    lines.push(
+        'Usage Rate Over 10 m3: ' +
+        document.getElementById('waterOver10Total').innerText
+    );
+
+
+    lines.push('');
+
+    lines.push('Treatment Block 1');
+    lines.push('-----------------');
+
+    lines.push(
+        'Waste Water Fixed Charge: ' +
+        document.getElementById('wasteFixedTotal').innerText
+    );
+
+    lines.push(
+        'Waste Water Discharge: ' +
+        document.getElementById('wasteDischargeTotal').innerText
+    );
+
+    
+    lines.push(
+        'Usage Rate Over 10 m3: ' +
+        document.getElementById('wasteOver10Total').innerText
+    );
+
+
+    lines.push('');
+
+    lines.push('Additional Charge');
+    lines.push('-----------------');
+
+    lines.push(
+        extraDesc + ': $' +
+        getValue('extraAmount').toFixed(2)
+    );
+
+    lines.push('');
+    lines.push(
+        'TOTAL CURRENT CHARGES: ' +
+        document.getElementById('grandTotal').innerText
+    );
+
+    lines.push('');
+    lines.push('© 2026 Glen Carruthers. All rights reserved.');
+
+    const blob = new Blob(
+        [lines.join('\n')],
+        { type: 'text/plain' }
+    );
+
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'water_bill.txt';
+    a.click();
+
+    URL.revokeObjectURL(a.href);
+}
+
+function printBill(){
+    window.print();
+}
+
+
+
+function saveRates(){
+
+    const settings = {
+
+        days: document.getElementById('days').value,
+
+        waterFixedRate:
+            document.getElementById('waterFixedRate').value,
+
+        waterConsumptionRate:
+            document.getElementById('waterConsumptionRate').value,
+
+        wasteFixedRate:
+            document.getElementById('wasteFixedRate').value,
+
+        wasteDischargeRate:
+            document.getElementById('wasteDischargeRate').value,
+
+        waterOver10Rate:
+            document.getElementById('waterOver10Rate').value,
+
+        wasteOver10Rate:
+            document.getElementById('wasteOver10Rate').value
+    };
+
+    localStorage.setItem(
+        'waterBillRates',
+        JSON.stringify(settings)
+    );
+
+    alert('Rates Saved');
+}
+
+function loadRates(){
+
+    const saved =
+        localStorage.getItem('waterBillRates');
+
+    if(!saved) return;
+
+    try{
+
+        const settings = JSON.parse(saved);
+
+        if(settings.days)
+            document.getElementById('days').value =
+                settings.days;
+
+        if(settings.waterFixedRate)
+            document.getElementById('waterFixedRate').value =
+                settings.waterFixedRate;
+
+        if(settings.waterConsumptionRate)
+            document.getElementById('waterConsumptionRate').value =
+                settings.waterConsumptionRate;
+
+        if(settings.wasteFixedRate)
+            document.getElementById('wasteFixedRate').value =
+                settings.wasteFixedRate;
+
+        if(settings.wasteDischargeRate)
+            document.getElementById('wasteDischargeRate').value =
+                settings.wasteDischargeRate;
+
+        if(settings.waterOver10Rate)
+            document.getElementById('waterOver10Rate').value =
+                settings.waterOver10Rate;
+
+        if(settings.wasteOver10Rate)
+            document.getElementById('wasteOver10Rate').value =
+                settings.wasteOver10Rate;
+
+    }catch(e){
+        console.log('Load failed');
+    }
+
+    calculate();
+}
+
+loadRates();
+</script>
+
+</body>
+</html>
